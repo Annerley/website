@@ -11,29 +11,28 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 @Controller
 public class AboutController {
 
-    String a = "Living Bones";
-    String b = "Abael Scout";
 
     ArrayList<Creature> tmp = new ArrayList<Creature>();
 
-    ArrayList<String> cre = new ArrayList<String>();
+
+    ArrayList<Creature> tmp2 = new ArrayList<Creature>();
 
     @Autowired
     private CreatureRepository creatureRepository;
     @GetMapping("/about")
     public String about(Model model) {
-        model.addAttribute("title", "About me");
+        model.addAttribute("title", "Frosthaven");
 
         //gather list from db
         ArrayList<String> cars = new ArrayList<String>();
-        cars.add("Volvo");
-        cars.add("BMW");
-        cars.add("Ford");
-        cars.add("Mazda");
+
         cars.add("Living Bones");
         cars.add("Abael Scout");
         cars.add("Ancient Artillery");
@@ -48,21 +47,37 @@ public class AboutController {
         Iterable<Creature> creatures = tmp;
 
 
+
         System.out.println(creatures.toString());
         //System.out.println(tmp.toString());
 
-        model.addAttribute("creatures", creatures);
+        model.addAttribute("creatures", tmp);
         return "about";
     }
 
     @PostMapping("/about")
     public String blogPostAdd(@RequestParam String creature, Model model){
 
+
         //creature = найти id по имени
-        cre.add(creature);
-        tmp.add(creatureRepository.findByName(creature).get(0));
+        //cre.add(creature);
+        Creature currentCreature = creatureRepository.findByName(creature).get(0);
+
+        currentCreature.SetCurrentInstancesQuantity(0);
+        for(int i=0; i<tmp.size(); i++){
+
+            if(tmp.get(i).getName().equals(currentCreature.getName())){
+
+                currentCreature.SetCurrentInstancesQuantity(tmp.get(i).getCurrentInstancesQuantity() + 1);
+            }
+
+        }
+
+
+
+        tmp.add(currentCreature);
         //Creature a = creatureRepository.findByName(creature.get(0));
-        System.out.println(creatureRepository.findByName(creature).get(0));
+        //System.out.println(creatureRepository.findByName(creature).get(0));
         return "redirect:/about";
     }
 }

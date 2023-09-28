@@ -30,12 +30,22 @@ public class Creature {
 
     @Transient
     int maxHp = hitPoints;
-
+    @Transient
+    int currentInstancesQuantity;
 
     @Transient
     public int getMaxHp(){
         return maxHp;
     }
+    @Transient
+    public int getCurrentInstancesQuantity(){
+        return currentInstancesQuantity;
+    }
+    @Transient
+    public void SetCurrentInstancesQuantity(int a){
+        currentInstancesQuantity = a;
+    }
+
 
 
 }
